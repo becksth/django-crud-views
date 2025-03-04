@@ -1,0 +1,51 @@
+from crispy_forms.bootstrap import FormActions
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path
+
+from app.views import IndexView
+from app.views.author import cv_author
+from app.views.book import cv_book
+from app.views.foo import cv_foo
+from app.views.bar import cv_bar
+from app.views.baz import cv_baz
+from app.views.ingredient import cv_ingredient
+from app.views.poly import cv_poly
+from app.views.detail import cv_detail
+from app.views.training import cv_training
+from app.views.weekday import cv_weekday
+from app.views.cookbook import cv_cookbook
+from app.views.recipe import cv_recipe
+from app.views.ingredient import cv_ingredient
+
+
+class CrispyAuthenticationForm(AuthenticationForm):
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.layout = Layout("username", "password", FormActions(Submit("login", "Log In")))
+        return helper
+
+
+urlpatterns = [
+    path("", IndexView.as_view(), name="index"),
+    path("login/", LoginView.as_view(form_class=CrispyAuthenticationForm), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
+]
+
+urlpatterns += (
+        cv_author.urlpatterns +
+        cv_book.urlpatterns +
+        cv_foo.urlpatterns +
+        cv_bar.urlpatterns +
+        cv_baz.urlpatterns +
+        cv_poly.urlpatterns +
+        cv_training.urlpatterns +
+        cv_weekday.urlpatterns +
+        cv_cookbook.urlpatterns +
+        cv_recipe.urlpatterns +
+        cv_ingredient.urlpatterns +
+        cv_detail.urlpatterns
+)
